@@ -1,0 +1,39 @@
+/* Global reset */
+:root {
+  font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #f3f5f7;
+  /* Sync with App.css var */
+}
+
+a {
+  font-weight: 500;
+  color: #2e8b7f;
+  text-decoration: inherit;
+}
+
+a:hover {
+  color: #2c7a70;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}

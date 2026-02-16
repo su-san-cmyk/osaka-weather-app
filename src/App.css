@@ -1,0 +1,364 @@
+/* App.css updates for "Calm & Cute" UI */
+:root {
+  --bg-color: #f3f5f7;
+  --card-bg: #ffffff;
+  --text-primary: #4a5568;
+  --text-secondary: #718096;
+  --accent-color: #2e8b7f;
+  --accent-light: #e6fffa;
+  --shadow-soft: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+  --radius-lg: 20px;
+  --font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  transition: background-color 0.5s ease;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 480px;
+  /* Reduced for better mobile/card feel */
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+  /* Increased padding */
+  box-sizing: border-box;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.6rem;
+  color: var(--text-primary);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+/* Card Common Styles */
+.weather-card,
+.commute-card,
+.advice-section,
+.one-liner,
+.rain-zone {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  margin-bottom: 1.5rem;
+  /* Spacing between cards */
+  padding: 1.8rem;
+  /* Increased inner padding 1.3x approx */
+  transition: transform 0.2s ease;
+}
+
+.weather-card:hover,
+.commute-card:hover {
+  transform: translateY(-2px);
+}
+
+/* One Liner */
+.one-liner {
+  background-color: #fffbeb;
+  /* Very light yellow */
+  color: #d97706;
+  /* Golden text */
+  border: 1px solid #fef3c7;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.5;
+  padding: 1.2rem;
+}
+
+/* Rain Zone */
+.rain-zone {
+  background-color: #ebf8ff;
+  /* Light blue */
+  color: #3182ce;
+  border: 1px solid #bee3f8;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 1rem;
+}
+
+/* Main Weather Card */
+.current-weather {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.current-weather h2 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.current-weather .temp {
+  font-size: 4.5rem;
+  font-weight: 300;
+  /* Lighter weight for elegance */
+  margin: 0;
+  color: var(--accent-color);
+  line-height: 1.1;
+}
+
+.conditions {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.conditions p {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+/* Stats Grid */
+.daily-stats,
+.hourly-highlight {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #edf2f7;
+}
+
+.stat-item,
+.hour-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.label {
+  font-size: 0.8rem;
+  color: #a0aec0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.value {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.high {
+  color: #e53e3e;
+}
+
+.low {
+  color: #3182ce;
+}
+
+/* Commute Section */
+.commute-section h3,
+.advice-section h3 {
+  color: var(--accent-color);
+  font-size: 1.1rem;
+  margin: 0 0 1.2rem 0;
+  text-align: center;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.commute-section h3::before,
+.commute-section h3::after,
+.advice-section h3::before,
+.advice-section h3::after {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 2px;
+  background-color: var(--accent-light);
+  border-radius: 2px;
+}
+
+.commute-section h3::before,
+.advice-section h3::before {
+  margin-right: 0.5rem;
+  background-color: var(--accent-color);
+  opacity: 0.3;
+}
+
+.commute-section h3::after,
+.advice-section h3::after {
+  margin-left: 0.5rem;
+  background-color: var(--accent-color);
+  opacity: 0.3;
+}
+
+
+.commute-card {
+  padding: 1.5rem;
+  border: 1px solid transparent;
+  /* Reset border */
+  border-left: 6px solid var(--accent-color);
+  /* Stronger accent brand */
+  background: white;
+}
+
+.commute-card:last-child {
+  border-left-color: #805ad5;
+  /* Maintain purple for evening but softer tone */
+}
+
+.commute-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.commute-header span:first-child {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.commute-temp {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent-color);
+}
+
+.commute-card:last-child .commute-temp {
+  color: #805ad5;
+}
+
+.commute-details {
+  display: flex;
+  justify-content: flex-start;
+  gap: 1.2rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  background-color: var(--bg-color);
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+}
+
+.commute-msg {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+/* Advice Section */
+.advice-section {
+  border-left: none;
+  /* Removed colored border for cleaner look */
+  text-align: left;
+}
+
+.advice-section ul {
+  list-style: none;
+  /* Remove default bullets */
+  padding: 0;
+  margin: 0;
+}
+
+.advice-section li {
+  margin-bottom: 0.8rem;
+  padding-left: 1.5rem;
+  position: relative;
+  line-height: 1.6;
+}
+
+.advice-section li::before {
+  content: '•';
+  color: var(--accent-color);
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.error {
+  background-color: #fff5f5;
+  color: #c53030;
+  padding: 1rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid #feb2b2;
+  text-align: center;
+}
+
+/* Additions for weather icon */
+.weather-icon {
+  font-size: 5rem;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Location & Update Button */
+.location-msg {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-bottom: 1rem;
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 0.5rem;
+  border-radius: 12px;
+}
+
+.update-btn-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.update-btn {
+  background-color: white;
+  border: 1px solid var(--accent-color);
+  color: var(--accent-color);
+  padding: 0.6rem 1.2rem;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.update-btn:hover {
+  background-color: var(--accent-color);
+  color: white;
+}
