@@ -5,10 +5,31 @@ import { getCommuteAdvice, getOneLiner } from './advice';
 import { getWeatherTheme, type Theme } from './weatherTheme';
 import type { ProcessedWeather } from './types';
 
-/** 気圧値を安全に表示 */
+/** 数値を安全に表示 */
 function fmt(val: number | null | undefined, digits = 0): string {
   if (val === null || val === undefined || isNaN(val as number)) return '—';
   return typeof val === 'number' ? val.toFixed(digits) : String(val);
+}
+
+/** 気圧 → 体調コメント */
+function getPressureComment(pressure: number | null, trend: string | null): { emoji: string; line1: string; line2: string } {
+  if (pressure !== null && pressure < 1005) {
+    return { emoji: '🟠', line1: '今日は頭痛注意の気圧です', line2: '無理しない日' };
+  }
+  if (trend === '↓ 下がってる') {
+    return { emoji: '🟡', line1: '気圧が下がり中', line2: 'だるさ・眠気出やすい日' };
+  }
+  return { emoji: '🟢', line1: '安定した気圧', line2: '過ごしやすい日' };
+}
+
+/** UV指数 → コメント */
+function getUvComment(uv: number | null): { label: string; labelEmoji: string; comment: string; level: string } {
+  if (uv === null) return { label: '—', labelEmoji: '', comment: '—', level: 'low' };
+  if (uv <= 2) return { label: '弱い', labelEmoji: '☀️', comment: '日焼け止めは軽めでOK', level: 'low' };
+  if (uv <= 5) return { label: '中', labelEmoji: '🌤', comment: 'できれば日焼け止めを', level: 'mid' };
+  if (uv <= 7) return { label: '強い', labelEmoji: '⚠️', comment: '日焼け止め推奨', level: 'high' };
+  if (uv <= 10) return { label: '非常に強い', labelEmoji: '🚨', comment: 'こまめに塗り直しを', level: 'extreme' };
+  return { label: '危険レベル', labelEmoji: '🚨', comment: '外出は対策必須！', level: 'extreme' };
 }
 
 function App() {
@@ -136,15 +157,18 @@ function App() {
               </div>
             </div>
 
-            {/* 気圧・UV セクション */}
-            <div className="health-stats">
-              {/* 気圧 */}
-              <div className="health-item">
-                <span className="health-icon">🌡</span>
-                <div className="health-content">
-                  <span className="health-label">気圧</span>
-                  <span className="health-value">
-                    {fmt(weather.pressure, 1)} <span className="health-unit">hPa</span>
+            {/* 気圧・UV セクション（2段×2カラム） */}
+            <div className="health-grid">
+
+              {/* ── 1段目：気圧 ── */}
+              {/* 左：気圧データ */}
+              <div className="hg-data">
+                <span className="hg-icon">🌡</span>
+                <div className="hg-content">
+                  <span className="hg-label">気圧</span>
+                  <span className="hg-value">
+                    {weather.pressure !== null ? Math.round(weather.pressure) : '—'}
+                    <span className="hg-unit">hPa</span>
                   </span>
                   {weather.pressureTrend && (
                     <span className={`pressure-trend ${weather.pressureTrend.startsWith('↑') ? 'up' : weather.pressureTrend.startsWith('↓') ? 'down' : 'stable'}`}>
@@ -153,22 +177,44 @@ function App() {
                   )}
                 </div>
               </div>
+              {/* 右：気圧コメント */}
+              {(() => {
+                const c = getPressureComment(weather.pressure, weather.pressureTrend);
+                return (
+                  <div className="hg-comment">
+                    <span className="hg-comment-main">{c.emoji} {c.line1}</span>
+                    <span className="hg-comment-sub">{c.line2}</span>
+                  </div>
+                );
+              })()}
 
-              {/* UV指数 */}
-              <div className="health-item">
-                <span className="health-icon">☀️</span>
-                <div className="health-content">
-                  <span className="health-label">UV指数</span>
-                  <span className="health-value">
-                    {fmt(weather.uvIndex)} <span className="health-unit">/ 11</span>
-                  </span>
-                  {weather.uvLabel && (
-                    <span className={`uv-label uv-${getUvClass(weather.uvIndex)}`}>
-                      {weather.uvLabel}
-                    </span>
-                  )}
-                </div>
-              </div>
+              {/* ── 2段目：UV ── */}
+              {/* 左：UVデータ */}
+              {(() => {
+                const uv = getUvComment(weather.uvIndex);
+                return (
+                  <>
+                    <div className="hg-data">
+                      <span className="hg-icon">☀️</span>
+                      <div className="hg-content">
+                        <span className="hg-label">UV指数</span>
+                        <span className="hg-value">
+                          {fmt(weather.uvIndex)}
+                        </span>
+                        <span className={`uv-label uv-${uv.level}`}>
+                          {uv.label} {uv.labelEmoji}
+                        </span>
+                      </div>
+                    </div>
+                    {/* 右：UVコメント */}
+                    <div className="hg-comment">
+                      <span className="hg-comment-main">紫外線：{uv.label} {uv.labelEmoji}</span>
+                      <span className="hg-comment-sub">{uv.comment}</span>
+                    </div>
+                  </>
+                );
+              })()}
+
             </div>
           </div>
 
@@ -228,14 +274,7 @@ function App() {
   );
 }
 
-/** UV値 → CSSクラス用文字列 */
-function getUvClass(uv: number | null): string {
-  if (uv === null) return 'low';
-  if (uv <= 2) return 'low';
-  if (uv <= 5) return 'mid';
-  if (uv <= 7) return 'high';
-  return 'extreme';
-}
+
 
 /** 天気コード → アイコン（App.tsx内でも使用） */
 function weatherCodeToIcon(code: number): string {
