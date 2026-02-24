@@ -392,66 +392,100 @@ h1 {
   }
 }
 
-/* ── 気圧・UV ヘルスセクション ── */
-.health-stats {
-  display: flex;
-  justify-content: space-around;
-  align-items: stretch;
+/* ── 気圧・UV : 2段×2カラム グリッド ── */
+.health-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  grid-template-rows: auto auto;
+  gap: 0.6rem 0.8rem;
   margin-top: 1.5rem;
   padding-top: 1.5rem;
   border-top: 1px solid #edf2f7;
-  gap: 1rem;
-}
-
-.health-item {
-  display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.7rem;
-  flex: 1;
-  padding: 0.4rem 0;
 }
 
-.health-icon {
-  font-size: 1.8rem;
+/* 左列：アイコン + データ */
+.hg-data {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  padding: 0.5rem 0.3rem;
+  border-radius: 12px;
+  background: #f7fafc;
+}
+
+.hg-icon {
+  font-size: 1.6rem;
   line-height: 1;
   flex-shrink: 0;
+  margin-top: 0.1rem;
 }
 
-.health-content {
+.hg-content {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
 }
 
-.health-label {
-  font-size: 0.75rem;
+.hg-label {
+  font-size: 0.72rem;
   color: #a0aec0;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-weight: 600;
 }
 
-.health-value {
-  font-size: 1.3rem;
+.hg-value {
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--text-primary);
   line-height: 1.2;
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
 }
 
-.health-unit {
-  font-size: 0.75rem;
+.hg-unit {
+  font-size: 0.72rem;
   font-weight: 400;
   color: var(--text-secondary);
 }
 
-/* 気圧傾向バッジ */
-.pressure-trend {
-  font-size: 0.72rem;
+/* 右列：コメント */
+.hg-comment {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.5rem 0.6rem;
+  background: rgba(46, 139, 127, 0.05);
+  border-left: 3px solid var(--accent-color);
+  border-radius: 0 10px 10px 0;
+  align-self: stretch;
+  justify-content: center;
+}
+
+.hg-comment-main {
+  font-size: 0.85rem;
   font-weight: 700;
-  padding: 0.15rem 0.5rem;
-  border-radius: 20px;
-  display: inline-block;
+  color: var(--text-primary);
+  line-height: 1.4;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.hg-comment-sub {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* 1段目と抄7段目の間に区切り線 */
+.hg-data:nth-child(3),
+.hg-comment:nth-child(4) {
+  border-top: 1px solid #edf2f7;
+  padding-top: 0.8rem;
+  margin-top: 0.2rem;
 }
 
 .pressure-trend.up {
