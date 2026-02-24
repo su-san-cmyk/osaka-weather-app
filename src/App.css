@@ -626,3 +626,64 @@ h1 {
   color: #63b3ed;
   font-weight: 600;
 }
+
+/* ── モバイル最適化（768px以下） ── */
+@media (max-width: 768px) {
+
+  /* 文字サイズを全体的に縮小（~0.9倍） */
+  html {
+    font-size: 14.5px;
+  }
+
+  /* 全体のpaddingを減らす */
+  .app-container {
+    padding: 1.2rem 1rem;
+    max-width: 100%;
+  }
+
+  /* カード幅と余白の調整 */
+  .weather-card,
+  .commute-card,
+  .one-liner,
+  .rain-zone {
+    width: 100%;
+    padding: 1.4rem;
+    box-sizing: border-box;
+    margin-bottom: 1.2rem;
+  }
+
+  /* 気圧・UVの2列表示 → 縦並びに変更 */
+  .health-grid {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+  }
+
+  /* 縦並び時の区切り線とコメントの調整 */
+  .hg-data:nth-child(3) {
+    border-top: 1px solid #edf2f7;
+    padding-top: 1rem;
+    margin-top: 0.8rem;
+  }
+
+  .hg-comment:nth-child(4) {
+    border-top: none;
+    padding-top: 0.5rem;
+    margin-top: 0;
+  }
+
+  .hg-comment {
+    border-radius: 8px;
+    padding: 0.6rem 0.8rem;
+  }
+
+  /* 7日間予報のカード幅縮小 */
+  .weekly-card {
+    min-width: 52px;
+    padding: 0.7rem 0.6rem;
+    gap: 0.25rem;
+  }
+
+  .weekly-icon {
+    font-size: 1.4rem;
+  }
+}
