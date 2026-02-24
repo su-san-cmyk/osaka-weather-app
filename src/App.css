@@ -555,6 +555,8 @@ h1 {
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   scrollbar-color: var(--accent-color) transparent;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .weekly-scroll::-webkit-scrollbar {
@@ -680,7 +682,7 @@ h1 {
 
   /* 7日間予報のカード幅縮小 */
   .weekly-card {
-    width: 76px;
+    width: 88px;
     padding: 0.7rem 0.4rem;
     gap: 0.25rem;
     font-size: 0.9rem;
