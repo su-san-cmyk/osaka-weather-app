@@ -5,6 +5,12 @@ import { getCommuteAdvice, getOneLiner } from './advice';
 import { getWeatherTheme, type Theme } from './weatherTheme';
 import type { ProcessedWeather } from './types';
 
+/** 気圧値を安全に表示 */
+function fmt(val: number | null | undefined, digits = 0): string {
+  if (val === null || val === undefined || isNaN(val as number)) return '—';
+  return typeof val === 'number' ? val.toFixed(digits) : String(val);
+}
+
 function App() {
   const [weather, setWeather] = useState<ProcessedWeather | null>(null);
   const [commuteAdvice, setCommuteAdvice] = useState<{ morning: string; evening: string } | null>(null);
@@ -32,7 +38,6 @@ function App() {
   };
 
   useEffect(() => {
-    // Attempt geolocation on mount
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -40,23 +45,21 @@ function App() {
           loadData(latitude, longitude, '現在地');
         },
         (err) => {
-          console.log("Geolocation failed or denied, falling back to Osaka.", err);
-          loadData(); // Default to Osaka
+          console.log('Geolocation failed or denied, falling back to Osaka.', err);
+          loadData();
           setError('位置情報が取得できなかったため、大阪の天気を表示しています');
         }
       );
     } else {
-      loadData(); // Default if not supported
+      loadData();
       setError('お使いのブラウザは位置情報をサポートしていません（大阪を表示中）');
     }
   }, []);
 
-  // Update body background color based on theme
   useEffect(() => {
     document.body.style.backgroundColor = theme.bgColor;
   }, [theme]);
 
-  // Handler for manual update
   const handleUpdate = () => {
     if (navigator.geolocation) {
       setLoading(true);
@@ -64,7 +67,7 @@ function App() {
         (position) => {
           const { latitude, longitude } = position.coords;
           loadData(latitude, longitude, '現在地');
-          setError(null); // Clear fallback message
+          setError(null);
         },
         () => {
           setError('位置情報の取得に失敗しました');
@@ -88,10 +91,18 @@ function App() {
 
       {weather && (
         <>
+          {/* 低気圧アラート */}
+          {weather.lowPressureAlert && (
+            <div className="low-pressure-alert">
+              ⚠️ 低気圧注意 — 頭痛・だるさに気をつけて
+            </div>
+          )}
+
           <div className="one-liner">
             <p>{oneLiner}</p>
           </div>
 
+          {/* メイン天気カード */}
           <div className="weather-card">
             <div className="current-weather">
               <div className="weather-icon">{theme.icon}</div>
@@ -124,12 +135,66 @@ function App() {
                 <span className="value">{weather.temp6pm}°C</span>
               </div>
             </div>
+
+            {/* 気圧・UV セクション */}
+            <div className="health-stats">
+              {/* 気圧 */}
+              <div className="health-item">
+                <span className="health-icon">🌡</span>
+                <div className="health-content">
+                  <span className="health-label">気圧</span>
+                  <span className="health-value">
+                    {fmt(weather.pressure, 1)} <span className="health-unit">hPa</span>
+                  </span>
+                  {weather.pressureTrend && (
+                    <span className={`pressure-trend ${weather.pressureTrend.startsWith('↑') ? 'up' : weather.pressureTrend.startsWith('↓') ? 'down' : 'stable'}`}>
+                      {weather.pressureTrend}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* UV指数 */}
+              <div className="health-item">
+                <span className="health-icon">☀️</span>
+                <div className="health-content">
+                  <span className="health-label">UV指数</span>
+                  <span className="health-value">
+                    {fmt(weather.uvIndex)} <span className="health-unit">/ 11</span>
+                  </span>
+                  {weather.uvLabel && (
+                    <span className={`uv-label uv-${getUvClass(weather.uvIndex)}`}>
+                      {weather.uvLabel}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="rain-zone">
             <p>{weather.rainTimeRanges}</p>
           </div>
 
+          {/* 7日間横スクロール予報 */}
+          {weather.weeklyForecast.length > 0 && (
+            <div className="weekly-section">
+              <h3 className="section-title">📅 7日間予報</h3>
+              <div className="weekly-scroll">
+                {weather.weeklyForecast.map((day, i) => (
+                  <div key={day.date} className={`weekly-card ${i === 0 ? 'today' : ''}`}>
+                    <span className="weekly-day">{day.dayLabel}</span>
+                    <span className="weekly-icon">{weatherCodeToIcon(day.weatherCode)}</span>
+                    <span className="weekly-high">{day.maxTemp}°</span>
+                    <span className="weekly-low">{day.minTemp}°</span>
+                    <span className="weekly-rain">💧{day.precipChance}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 通勤アドバイス */}
           <div className="commute-section">
             <h3>通勤アドバイス</h3>
 
@@ -161,6 +226,27 @@ function App() {
       )}
     </div>
   );
+}
+
+/** UV値 → CSSクラス用文字列 */
+function getUvClass(uv: number | null): string {
+  if (uv === null) return 'low';
+  if (uv <= 2) return 'low';
+  if (uv <= 5) return 'mid';
+  if (uv <= 7) return 'high';
+  return 'extreme';
+}
+
+/** 天気コード → アイコン（App.tsx内でも使用） */
+function weatherCodeToIcon(code: number): string {
+  if (code === 0) return '☀️';
+  if (code <= 2) return '🌤';
+  if (code <= 3) return '☁️';
+  if (code <= 49) return '🌫';
+  if (code <= 69) return '🌧';
+  if (code <= 79) return '❄️';
+  if (code <= 84) return '🌦';
+  return '⛈';
 }
 
 export default App;
