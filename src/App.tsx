@@ -172,7 +172,7 @@ function App() {
                   </span>
                   {weather.pressureTrend && (
                     <span className={`pressure-trend ${weather.pressureTrend.startsWith('↑') ? 'up' : weather.pressureTrend.startsWith('↓') ? 'down' : 'stable'}`}>
-                      {weather.pressureTrend}
+                      {weather.pressureTrend.startsWith('↑') ? '↑ 上昇中' : weather.pressureTrend.startsWith('↓') ? '↓ 下降中' : '→ 変化なし'}
                     </span>
                   )}
                 </div>
