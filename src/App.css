@@ -362,3 +362,233 @@ h1 {
   background-color: var(--accent-color);
   color: white;
 }
+
+/* ── 低気圧アラート ── */
+.low-pressure-alert {
+  background: linear-gradient(135deg, #fff5f0, #ffe4d6);
+  color: #c05621;
+  border: 1px solid #fed7b0;
+  border-left: 5px solid #dd6b20;
+  border-radius: var(--radius-lg);
+  padding: 0.9rem 1.2rem;
+  margin-bottom: 1.2rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  animation: pulse-alert 2s ease-in-out infinite;
+}
+
+@keyframes pulse-alert {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(221, 107, 32, 0.2);
+  }
+
+  50% {
+    box-shadow: 0 0 0 6px rgba(221, 107, 32, 0);
+  }
+}
+
+/* ── 気圧・UV ヘルスセクション ── */
+.health-stats {
+  display: flex;
+  justify-content: space-around;
+  align-items: stretch;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #edf2f7;
+  gap: 1rem;
+}
+
+.health-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  flex: 1;
+  padding: 0.4rem 0;
+}
+
+.health-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.health-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.health-label {
+  font-size: 0.75rem;
+  color: #a0aec0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.health-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.health-unit {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+/* 気圧傾向バッジ */
+.pressure-trend {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+.pressure-trend.up {
+  background: #e6fffa;
+  color: #2e8b7f;
+}
+
+.pressure-trend.down {
+  background: #fff5f5;
+  color: #c53030;
+}
+
+.pressure-trend.stable {
+  background: #f7fafc;
+  color: #718096;
+}
+
+/* UVラベルバッジ */
+.uv-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+.uv-label.uv-low {
+  background: #e6fffa;
+  color: #276749;
+}
+
+.uv-label.uv-mid {
+  background: #fffbeb;
+  color: #d97706;
+}
+
+.uv-label.uv-high {
+  background: #fff5f0;
+  color: #c05621;
+}
+
+.uv-label.uv-extreme {
+  background: #fff5f5;
+  color: #c53030;
+}
+
+/* ── 7日間週間予報 ── */
+.weekly-section {
+  margin-bottom: 1.5rem;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent-color);
+  margin: 0 0 0.9rem 0;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+.weekly-scroll {
+  display: flex;
+  gap: 0.7rem;
+  overflow-x: auto;
+  padding: 0.5rem 0.2rem 1rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-color) transparent;
+}
+
+.weekly-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.weekly-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.weekly-scroll::-webkit-scrollbar-thumb {
+  background-color: var(--accent-color);
+  border-radius: 4px;
+  opacity: 0.4;
+}
+
+.weekly-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 0.9rem 0.75rem;
+  min-width: 64px;
+  box-shadow: var(--shadow-soft);
+  flex-shrink: 0;
+  transition: transform 0.18s ease;
+}
+
+.weekly-card:hover {
+  transform: translateY(-2px);
+}
+
+.weekly-card.today {
+  background: linear-gradient(160deg, #e6fffa, var(--accent-light));
+  border: 1.5px solid rgba(46, 139, 127, 0.25);
+}
+
+.weekly-day {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
+}
+
+.weekly-card.today .weekly-day {
+  color: var(--accent-color);
+}
+
+.weekly-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.weekly-high {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #e53e3e;
+}
+
+.weekly-low {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #3182ce;
+}
+
+.weekly-rain {
+  font-size: 0.72rem;
+  color: #63b3ed;
+  font-weight: 600;
+}
